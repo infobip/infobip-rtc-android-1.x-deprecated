@@ -1,0 +1,155 @@
+### Introduction
+Infobip RTC is an Android SDK which enables you to take advantage of Infobip's WebRTC platform. It gives you ability to enrich your web applications with real-time communications in minimum time, while focusing on your application's user experience and business logic. We currently support audio calls between two WebRTC users, and phone calls between WebRTC user and actual phone device.
+
+Here you will find overview and quick guide how to connect to Infobip WebRTC platform. There is also in-depth reference documentation available.
+
+### First time setup
+In order to use Infobip RTC, you need to have WebRTC enabled on your account, and that's it! You are ready to make WebRTC calls. Please contact your account manager to enable WebRTC.
+
+### Getting SDK
+You can get distribution of our SDK through gradle dependency that you will pull from Central Maven repository. Just add this snippet to your `build.gradle`:
+```
+dependencies {
+    ...
+    implementation ('com.infobip.webrtc:infobip-rtc:0.0.7@aar') {
+            transitive = true
+    }
+}
+```
+
+### Authentication
+Since Infobip RTC is just SDK, it means you are developing your own application, and you only use Infobip RTC as dependency. Your application has your own users, which we wall call subscribers throughout this guide. So, in order to use Infobip RTC, you need to register your subscribers to our platform. Credentials your subscribers use to connect to your application are irrelevant to Infobip. We only need identity with which they will use to present themselves. And when we have their identity, we can generate token that you will assign for them to use. With that token, your subscribers can connect to our platform (using Infobip RTC SDK).
+
+In order to generate these tokens for your subscribers, you need to call our [`/webrtc/token`](https://ibdemo.readme.io/v1.0/docs/generate-token) HTTP API method with proper parameters. Also, there you will authenticate yourself against Infobip platform, so we can relate subscriber's token to you. Typically, generating token occurs after your subscribers are authenticated inside your application.
+In response you will receive token, that you will use to instantiate InfobipRTC client in your web application.
+
+### Infobip RTC Client
+After you received token via HTTP API, you are ready to instantiate [`InfobipRTC`](./docs/reference/InfobipRTC.md) client. It can be done using these commands:
+
+```
+String token = obtainToken(); // here you call '/webrtc/token'
+RTCOptions options = RTCOptions.builder().build();
+Context context = getApplicationContext();
+
+InfobipRTC infobipRTC = new DefaultInfobipRTC(token, options, context);
+```
+
+Note that this does not actually connect to Infobip WebRTC platform, it just creates new instance of [`InfobipRTC`](./docs/reference/InfobipRTC.md). Connecting is done via [`connect`](./docs/reference/InfobipRTC.md#connect) method. Before connecting, it is useful to set-up event handlers, so you can do something when connection is set-up, when connection is lost, etc. Events are set-up via [`addEventListener`](./docs/reference/InfobipRTC.md#addEventListener) method:
+
+```
+infobipRTC.addEventListener(new RTCEventListener() {
+    @Override
+    public void onConnected(ConnectedEvent connectedEvent) {
+        Toast.makeText(getApplicationContext(), "Connected with identity: " + connectedEvent.getIdentity(), Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onDisconnected(DisconnectedEvent disconnectedEvent) {
+        Toast.makeText(getApplicationContext(), "Disconnected with reason: " + disconnectedEvent.getReason(), Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onReconnecting(ReconnectingEvent reconnectingEvent) {
+        Toast.makeText(getApplicationContext(), "Reconnecting!", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onReconnected(ReconnectedEvent reconnectedEvent) {
+        Toast.makeText(getApplicationContext(), "Reconnected!", Toast.LENGTH_LONG).show();
+    }
+});
+```
+
+Now you are ready to connect:
+
+```
+infobipRTC.connect();
+```
+
+### Making a call
+You can call another WebRTC subscriber, if you know it's identity. It is done via [`call`](./docs/reference/InfobipRTC.md#call) method:
+
+```
+OutgoingCall outgoingCall = infobipRTC.call("Alice", CallOptions.builder().build());
+```
+
+As you can see, [`call`](./docs/reference/InfobipRTC.md#call) method returns instance of [`OutgoingCall`](./docs/reference/OutgoingCall.md) as a result. With it you can track status of your call and respond to events. Similar as for client, you can set-up event handlers, so you can do something when called subscriber answers the call, rejects it, when call is ended, etc. You set-up event handlers with this code:
+
+```
+outgoingCall.addEventListener(new CallEventListener() {
+    @Override
+    public void onEstablished(CallEstablishedEvent callEstablishedEvent) {
+        Toast.makeText(getApplicationContext(), "Alice answered call!", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onHangup(CallHangupEvent callHangupEvent) {
+        Toast.makeText(getApplicationContext(), "Call is done! Status: " + callHangupEvent.getErrorCode().toString(), Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onError(CallErrorEvent callErrorEvent) {
+        Toast.makeText(getApplicationContext(), "Oops, something went very wrong! Message: " + callErrorEvent.getReason().toString(), Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onRinging(CallRingingEvent callRingingEvent) {
+        Toast.makeText(getApplicationContext(), "Call is ringing on Alice's device!", Toast.LENGTH_LONG).show();
+    }
+});
+```
+
+Most important part of call is definitively media that travels across subscribers. It starts flowing after `established` event is received. You do not have to do anything special to enable media flow (receive caller audio and send your audio to caller), it will be done automatically.
+
+When event handlers are set-up and call is established, there are few things that you can do with actual call. One of them, of course, is to hangup. That can be done via [`hangup`](./docs/reference/Call.md#hangup) method on call, and after that, both parties will receive `hangup` event upon hangup completion.
+
+```
+outgoingCall.hangup();
+```
+
+You can simulate digit press during the call, by sending DTMF codes (Dual-Tone Multi-Frequency). It is achieved via [`sendDTMF`](./docs/reference/Call.md#sendDTMF) method. Valid DTMF codes are digits `0`-`9`, `*` and `#`.
+
+```
+outgoingCall.sendDTMF("*");
+```
+
+During the call, you can also mute (and unmute) your audio:
+
+```
+outgoingCall.mute(true);
+```
+
+### Receiving a call
+Besides making outgoing calls, you can also receive incoming calls. In order to do that, you need to register `incoming-call` event handler of [`InfobipRTC`](./docs/reference/InfobipRTC.md) client. There you can define behavior on incoming call. One of the most common thing to do there is to show Answer and Reject options on some UI. For purposes of this guide, let's see example that answers incoming call as soon as it arrives:
+
+```
+infobipRTC.addIncomingCallEventListener(new IncomingCallEventListener() {
+    @Override
+    public void onIncomingCall(IncomingCallEvent incomingCallEvent) {
+        IncomingCall incomingCall = incomingCallEvent.getIncomingCall();
+        Toast.makeText(getApplicationContext(), "Received incoming call from:  " + incomingCall.source(), Toast.LENGTH_LONG).show();
+        incomingCall.addEventListener(new CallEventListener() {...});
+        incomingCall.accept(); // or incomingCall.decline();
+    }
+    ...
+});
+```
+
+If you are in the middle of a call, naturally, you cannot receive second call. So, if someone makes incoming call to you while you are talking, you will receive an `missed-call` event:
+
+```
+infobipRTC.addIncomingCallEventListener(new IncomingCallEventListener() {
+    @Override
+    public void onMissedCall(MissedCallEvent missedCallEvent) {
+        Toast.makeText(getApplicationContext(), "Received incoming call from:  " + missedCallEvent.getCaller(), Toast.LENGTH_LONG).show();
+    }
+    ...
+});
+```
+
+### Calling phone number
+It is very much similar to calling regular WebRTC user, you just use [`callPhoneNumber`](./docs/reference/InfobipRTC.md#callPhoneNumber) method instead [`call`](./docs/reference/InfobipRTC.md#call). This method accepts optional second parameter, options in which you can define from parameter. It's value will display on calling phone device as Caller ID. Result of [`callPhoneNumber`](./docs/reference/InfobipRTC.md#callPhoneNumber) is also [`OutgoingCall`](./docs/reference/OutgoingCall.md) that you can do everything you could when using [`call`](./docs/reference/InfobipRTC.md#call) method:
+
+```
+OutgoingCall outgoingCall = infobipRTC.callPhoneNumber("41793026727", CallPhoneNumberOptions.builder().from("41793026731").build());
+```
