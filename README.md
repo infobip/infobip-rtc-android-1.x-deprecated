@@ -24,7 +24,7 @@ In order to generate these tokens for your subscribers, you need to call our [`/
 In response you will receive token, that you will use to instantiate InfobipRTC client in your web application.
 
 ### Infobip RTC Client
-After you received token via HTTP API, you are ready to instantiate [`InfobipRTC`](./docs/reference/InfobipRTC.md) client. It can be done using these commands:
+After you received token via HTTP API, you are ready to instantiate [`InfobipRTC`](https://github.com/infobip/infobip-rtc-android/wiki/InfobipRTC) client. It can be done using these commands:
 
 ```
 String token = obtainToken(); // here you call '/webrtc/token'
@@ -34,7 +34,7 @@ Context context = getApplicationContext();
 InfobipRTC infobipRTC = new DefaultInfobipRTC(token, options, context);
 ```
 
-Note that this does not actually connect to Infobip WebRTC platform, it just creates new instance of [`InfobipRTC`](./docs/reference/InfobipRTC.md). Connecting is done via [`connect`](./docs/reference/InfobipRTC.md#connect) method. Before connecting, it is useful to set-up event handlers, so you can do something when connection is set-up, when connection is lost, etc. Events are set-up via [`addEventListener`](./docs/reference/InfobipRTC.md#addEventListener) method:
+Note that this does not actually connect to Infobip WebRTC platform, it just creates new instance of [`InfobipRTC`](https://github.com/infobip/infobip-rtc-android/wiki/InfobipRTC). Connecting is done via [`connect`](https://github.com/infobip/infobip-rtc-android/wiki/InfobipRTC#connect) method. Before connecting, it is useful to set-up event handlers, so you can do something when connection is set-up, when connection is lost, etc. Events are set-up via [`addEventListener`](https://github.com/infobip/infobip-rtc-android/wiki/InfobipRTC#addEventListener) method:
 
 ```
 infobipRTC.addEventListener(new RTCEventListener() {
@@ -67,13 +67,13 @@ infobipRTC.connect();
 ```
 
 ### Making a call
-You can call another WebRTC subscriber, if you know it's identity. It is done via [`call`](./docs/reference/InfobipRTC.md#call) method:
+You can call another WebRTC subscriber, if you know it's identity. It is done via [`call`](https://github.com/infobip/infobip-rtc-android/wiki/InfobipRTC#call) method:
 
 ```
 OutgoingCall outgoingCall = infobipRTC.call("Alice", CallOptions.builder().build());
 ```
 
-As you can see, [`call`](./docs/reference/InfobipRTC.md#call) method returns instance of [`OutgoingCall`](./docs/reference/OutgoingCall.md) as a result. With it you can track status of your call and respond to events. Similar as for client, you can set-up event handlers, so you can do something when called subscriber answers the call, rejects it, when call is ended, etc. You set-up event handlers with this code:
+As you can see, [`call`](https://github.com/infobip/infobip-rtc-android/wiki/InfobipRTC#call) method returns instance of [`OutgoingCall`](https://github.com/infobip/infobip-rtc-android/wiki/OutgoingCall) as a result. With it you can track status of your call and respond to events. Similar as for client, you can set-up event handlers, so you can do something when called subscriber answers the call, rejects it, when call is ended, etc. You set-up event handlers with this code:
 
 ```
 outgoingCall.addEventListener(new CallEventListener() {
@@ -101,13 +101,13 @@ outgoingCall.addEventListener(new CallEventListener() {
 
 Most important part of call is definitively media that travels across subscribers. It starts flowing after `established` event is received. You do not have to do anything special to enable media flow (receive caller audio and send your audio to caller), it will be done automatically.
 
-When event handlers are set-up and call is established, there are few things that you can do with actual call. One of them, of course, is to hangup. That can be done via [`hangup`](./docs/reference/Call.md#hangup) method on call, and after that, both parties will receive `hangup` event upon hangup completion.
+When event handlers are set-up and call is established, there are few things that you can do with actual call. One of them, of course, is to hangup. That can be done via [`hangup`](https://github.com/infobip/infobip-rtc-android/wiki/Call#hangup) method on call, and after that, both parties will receive `hangup` event upon hangup completion.
 
 ```
 outgoingCall.hangup();
 ```
 
-You can simulate digit press during the call, by sending DTMF codes (Dual-Tone Multi-Frequency). It is achieved via [`sendDTMF`](./docs/reference/Call.md#sendDTMF) method. Valid DTMF codes are digits `0`-`9`, `*` and `#`.
+You can simulate digit press during the call, by sending DTMF codes (Dual-Tone Multi-Frequency). It is achieved via [`sendDTMF`](https://github.com/infobip/infobip-rtc-android/wiki/Call#sendDTMF) method. Valid DTMF codes are digits `0`-`9`, `*` and `#`.
 
 ```
 outgoingCall.sendDTMF("*");
@@ -120,7 +120,7 @@ outgoingCall.mute(true);
 ```
 
 ### Receiving a call
-Besides making outgoing calls, you can also receive incoming calls. In order to do that, you need to register `incoming-call` event handler of [`InfobipRTC`](./docs/reference/InfobipRTC.md) client. There you can define behavior on incoming call. One of the most common thing to do there is to show Answer and Reject options on some UI. For purposes of this guide, let's see example that answers incoming call as soon as it arrives:
+Besides making outgoing calls, you can also receive incoming calls. In order to do that, you need to register `incoming-call` event handler of [`InfobipRTC`](https://github.com/infobip/infobip-rtc-android/wiki/InfobipRTC) client. There you can define behavior on incoming call. One of the most common thing to do there is to show Answer and Reject options on some UI. For purposes of this guide, let's see example that answers incoming call as soon as it arrives:
 
 ```
 infobipRTC.addIncomingCallEventListener(new IncomingCallEventListener() {
@@ -148,7 +148,7 @@ infobipRTC.addIncomingCallEventListener(new IncomingCallEventListener() {
 ```
 
 ### Calling phone number
-It is very much similar to calling regular WebRTC user, you just use [`callPhoneNumber`](./docs/reference/InfobipRTC.md#callPhoneNumber) method instead [`call`](./docs/reference/InfobipRTC.md#call). This method accepts optional second parameter, options in which you can define from parameter. It's value will display on calling phone device as Caller ID. Result of [`callPhoneNumber`](./docs/reference/InfobipRTC.md#callPhoneNumber) is also [`OutgoingCall`](./docs/reference/OutgoingCall.md) that you can do everything you could when using [`call`](./docs/reference/InfobipRTC.md#call) method:
+It is very much similar to calling regular WebRTC user, you just use [`callPhoneNumber`](https://github.com/infobip/infobip-rtc-android/wiki/InfobipRTC#callPhoneNumber) method instead [`call`](https://github.com/infobip/infobip-rtc-android/wiki/InfobipRTC#call). This method accepts optional second parameter, options in which you can define from parameter. It's value will display on calling phone device as Caller ID. Result of [`callPhoneNumber`](https://github.com/infobip/infobip-rtc-android/wiki/InfobipRTC#callPhoneNumber) is also [`OutgoingCall`](https://github.com/infobip/infobip-rtc-android/wiki/OutgoingCall) that you can do everything you could when using [`call`](https://github.com/infobip/infobip-rtc-android/wiki/InfobipRTC#call) method:
 
 ```
 OutgoingCall outgoingCall = infobipRTC.callPhoneNumber("41793026727", CallPhoneNumberOptions.builder().from("41793026731").build());
