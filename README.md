@@ -11,7 +11,7 @@ You can get distribution of our SDK through gradle dependency that you will pull
 ```
 dependencies {
     ...
-    implementation ('com.infobip.webrtc:infobip-rtc:0.0.7@aar') {
+    implementation ('com.infobip:infobip-rtc:0.0.15@aar') {
             transitive = true
     }
 }
