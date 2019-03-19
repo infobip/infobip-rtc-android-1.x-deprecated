@@ -7,7 +7,7 @@ Here you will find overview and quick guide how to connect to Infobip WebRTC pla
 In order to use Infobip RTC, you need to have WebRTC enabled on your account, and that's it! You are ready to make WebRTC calls. Please contact your account manager to enable WebRTC.
 
 ### Getting SDK
-You can get distribution of our SDK through gradle dependency that you will pull from Central Maven repository. Just add this snippet to your `build.gradle`:
+You can get distribution of our SDK through gradle dependency that you will pull from jCenter maven repository. Just add this snippet to your `build.gradle`:
 ```
 dependencies {
     ...
