@@ -40,22 +40,22 @@ Note that this does not actually connect to Infobip WebRTC platform, it just cre
 infobipRTC.addEventListener(new RTCEventListener() {
     @Override
     public void onConnected(ConnectedEvent connectedEvent) {
-        Toast.makeText(getApplicationContext(), "Connected with identity: " + connectedEvent.getIdentity(), Toast.LENGTH_LONG).show();
+        Log.d("WebRTC", "Connected with identity: " + connectedEvent.getIdentity());
     }
 
     @Override
     public void onDisconnected(DisconnectedEvent disconnectedEvent) {
-        Toast.makeText(getApplicationContext(), "Disconnected with reason: " + disconnectedEvent.getReason(), Toast.LENGTH_LONG).show();
+        Log.d("WebRTC", "Disconnected with reason: " + disconnectedEvent.getReason());
     }
 
     @Override
     public void onReconnecting(ReconnectingEvent reconnectingEvent) {
-        Toast.makeText(getApplicationContext(), "Reconnecting!", Toast.LENGTH_LONG).show();
+        Log.d("WebRTC", "Reconnecting!");
     }
 
     @Override
     public void onReconnected(ReconnectedEvent reconnectedEvent) {
-        Toast.makeText(getApplicationContext(), "Reconnected!", Toast.LENGTH_LONG).show();
+        Log.d("WebRTC", "Reconnected!");
     }
 });
 ```
@@ -79,22 +79,22 @@ As you can see, [`call`](https://github.com/infobip/infobip-rtc-android/wiki/Inf
 outgoingCall.addEventListener(new CallEventListener() {
     @Override
     public void onEstablished(CallEstablishedEvent callEstablishedEvent) {
-        Toast.makeText(getApplicationContext(), "Alice answered call!", Toast.LENGTH_LONG).show();
+        Log.d("WebRTC", "Alice answered call!");
     }
 
     @Override
     public void onHangup(CallHangupEvent callHangupEvent) {
-        Toast.makeText(getApplicationContext(), "Call is done! Status: " + callHangupEvent.getErrorCode().toString(), Toast.LENGTH_LONG).show();
+        Log.d("WebRTC", "Call is done! Status: " + callHangupEvent.getErrorCode().toString());
     }
 
     @Override
     public void onError(CallErrorEvent callErrorEvent) {
-        Toast.makeText(getApplicationContext(), "Oops, something went very wrong! Message: " + callErrorEvent.getReason().toString(), Toast.LENGTH_LONG).show();
+        Log.d("WebRTC", "Oops, something went very wrong! Message: " + callErrorEvent.getReason().toString());
     }
 
     @Override
     public void onRinging(CallRingingEvent callRingingEvent) {
-        Toast.makeText(getApplicationContext(), "Call is ringing on Alice's device!", Toast.LENGTH_LONG).show();
+        Log.d("WebRTC", "Call is ringing on Alice's device!");
     }
 });
 ```
@@ -127,7 +127,7 @@ infobipRTC.addIncomingCallEventListener(new IncomingCallEventListener() {
     @Override
     public void onIncomingCall(IncomingCallEvent incomingCallEvent) {
         IncomingCall incomingCall = incomingCallEvent.getIncomingCall();
-        Toast.makeText(getApplicationContext(), "Received incoming call from:  " + incomingCall.source(), Toast.LENGTH_LONG).show();
+        Log.d("WebRTC", "Received incoming call from:  " + incomingCall.source());
         incomingCall.addEventListener(new CallEventListener() {...});
         incomingCall.accept(); // or incomingCall.decline();
     }
@@ -141,7 +141,7 @@ If you are in the middle of a call, naturally, you cannot receive second call. S
 infobipRTC.addIncomingCallEventListener(new IncomingCallEventListener() {
     @Override
     public void onMissedCall(MissedCallEvent missedCallEvent) {
-        Toast.makeText(getApplicationContext(), "Received incoming call from:  " + missedCallEvent.getCaller(), Toast.LENGTH_LONG).show();
+        Log.d("WebRTC", "Received incoming call from:  " + missedCallEvent.getCaller());
     }
     ...
 });
