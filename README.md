@@ -151,5 +151,5 @@ infobipRTC.addIncomingCallEventListener(new IncomingCallEventListener() {
 It is very much similar to calling regular WebRTC user, you just use [`callPhoneNumber`](https://github.com/infobip/infobip-rtc-android/wiki/InfobipRTC#callPhoneNumber) method instead [`call`](https://github.com/infobip/infobip-rtc-android/wiki/InfobipRTC#call). This method accepts optional second parameter, options in which you can define from parameter. It's value will display on calling phone device as Caller ID. Result of [`callPhoneNumber`](https://github.com/infobip/infobip-rtc-android/wiki/InfobipRTC#callPhoneNumber) is also [`OutgoingCall`](https://github.com/infobip/infobip-rtc-android/wiki/OutgoingCall) that you can do everything you could when using [`call`](https://github.com/infobip/infobip-rtc-android/wiki/InfobipRTC#call) method:
 
 ```
-OutgoingCall outgoingCall = infobipRTC.callPhoneNumber("41793026727", CallPhoneNumberOptions.builder().from("41793026731").build());
+OutgoingCall outgoingCall = infobipRTC.callPhoneNumber("41793026727", CallPhoneNumberOptions.builder().from("33755531044").build());
 ```
