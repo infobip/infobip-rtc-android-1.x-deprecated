@@ -11,7 +11,7 @@ You can get distribution of our SDK through gradle dependency that you will pull
 ```
 dependencies {
     ...
-    implementation ('com.infobip:infobip-rtc:0.0.15@aar') {
+    implementation ('com.infobip:infobip-rtc:0.0.17@aar') {
             transitive = true
     }
 }
@@ -22,6 +22,10 @@ Since Infobip RTC is just SDK, it means you are developing your own application,
 
 In order to generate these tokens for your subscribers, you need to call our [`/webrtc/token`](https://dev.infobip.com/webrtc/generate-token) HTTP API method with proper parameters. Also, there you will authenticate yourself against Infobip platform, so we can relate subscriber's token to you. Typically, generating token occurs after your subscribers are authenticated inside your application.
 In response you will receive token, that you will use to instantiate InfobipRTC client in your web application.
+
+### Permissions
+Only permission with `dangerous` protection level SDK needs is [`RECORD_AUDIO`](https://developer.android.com/reference/android/Manifest.permission.html#RECORD_AUDIO). That means you need to ask for it in runtime, inside your application. [Here](https://developer.android.com/training/permissions/requesting) is how you can do that.  
+There are also 3 permissions with `normal` protection level that are included in SDK's manifest: [`ACCESS_NETWORK_STATE`](https://developer.android.com/reference/android/Manifest.permission.html#ACCESS_NETWORK_STATE), [`INTERNET`](https://developer.android.com/reference/android/Manifest.permission.html#INTERNET), [`MODIFY_AUDIO_SETTINGS`](https://developer.android.com/reference/android/Manifest.permission.html#MODIFY_AUDIO_SETTINGS).
 
 ### Infobip RTC Client
 After you received token via HTTP API, you are ready to instantiate [`InfobipRTC`](https://github.com/infobip/infobip-rtc-android/wiki/InfobipRTC) client. It can be done using these commands:
