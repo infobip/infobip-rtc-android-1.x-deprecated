@@ -35,7 +35,7 @@ String token = obtainToken(); // here you call '/webrtc/token'
 RTCOptions options = RTCOptions.builder().build();
 Context context = getApplicationContext();
 
-InfobipRTC infobipRTC = new DefaultInfobipRTC(token, options, context);
+InfobipRTC infobipRTC = DefaultInfobipRTC.getInstance(token, options, context);
 ```
 
 Note that this does not actually connect to Infobip WebRTC platform, it just creates new instance of [`InfobipRTC`](https://github.com/infobip/infobip-rtc-android/wiki/InfobipRTC). Connecting is done via [`connect`](https://github.com/infobip/infobip-rtc-android/wiki/InfobipRTC#connect) method. Before connecting, it is useful to set-up event handlers, so you can do something when connection is set-up, when connection is lost, etc. Events are set-up via [`addEventListener`](https://github.com/infobip/infobip-rtc-android/wiki/InfobipRTC#addEventListener) method:
