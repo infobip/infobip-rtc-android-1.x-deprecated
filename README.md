@@ -123,6 +123,12 @@ During the call, you can also mute (and unmute) your audio:
 outgoingCall.mute(true);
 ```
 
+Sound can also be played on speakerphone during the call. That option can be toggled as many times as you like, just call [`speakerphone`](https://github.com/infobip/infobip-rtc-android/wiki/Call#speakerphone) method with appropriate parameter. By the default, it is disabled, you can enable it like this:
+
+```
+outgoingCall.speakerphone(true);
+```
+
 ### Receiving a call
 Besides making outgoing calls, you can also receive incoming calls. In order to do that, you need to register `incoming-call` event handler of [`InfobipRTC`](https://github.com/infobip/infobip-rtc-android/wiki/InfobipRTC) client. There you can define behavior on incoming call. One of the most common thing to do there is to show Answer and Reject options on some UI. For purposes of this guide, let's see example that answers incoming call as soon as it arrives:
 
