@@ -24,7 +24,7 @@ In order to generate these tokens for your subscribers, you need to call our [`/
 In response you will receive token, that you will use to instantiate InfobipRTC client in your web application.
 
 ### Permissions
-Only permission with `dangerous` protection level SDK needs is [`RECORD_AUDIO`](https://developer.android.com/reference/android/Manifest.permission.html#RECORD_AUDIO). That means you need to ask for it in runtime, inside your application. [Here](https://developer.android.com/training/permissions/requesting) is how you can do that.  
+The only permission with `dangerous` protection level SDK needs is [`RECORD_AUDIO`](https://developer.android.com/reference/android/Manifest.permission.html#RECORD_AUDIO). That means you need to ask for it in runtime, inside your application. [Here](https://developer.android.com/training/permissions/requesting) is how you can do that.  
 There are also 3 permissions with `normal` protection level that are included in SDK's manifest: [`ACCESS_NETWORK_STATE`](https://developer.android.com/reference/android/Manifest.permission.html#ACCESS_NETWORK_STATE), [`INTERNET`](https://developer.android.com/reference/android/Manifest.permission.html#INTERNET), [`MODIFY_AUDIO_SETTINGS`](https://developer.android.com/reference/android/Manifest.permission.html#MODIFY_AUDIO_SETTINGS).
 
 ### Infobip RTC Client
