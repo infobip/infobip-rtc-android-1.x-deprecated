@@ -20,7 +20,7 @@ dependencies {
 ### Authentication
 Since Infobip RTC is just SDK, it means you are developing your own application, and you only use Infobip RTC as dependency. Your application has your own users, which we wall call subscribers throughout this guide. So, in order to use Infobip RTC, you need to register your subscribers to our platform. Credentials your subscribers use to connect to your application are irrelevant to Infobip. We only need identity with which they will use to present themselves. And when we have their identity, we can generate a token that you will assign for them to use. With that token, your subscribers can connect to our platform (using Infobip RTC SDK).
 
-In order to generate these tokens for your subscribers, you need to call our [`/webrtc/token`](https://dev.infobip.com/webrtc/generate-token) HTTP API method with proper parameters. Also, you will authenticate yourself against Infobip platform there, so we can relate the subscriber's token to you. Typically, generating token occurs after your subscribers are authenticated inside your application.
+In order to generate these tokens for your subscribers, you need to call our [`/webrtc/1/token`](https://dev.infobip.com/webrtc/generate-token) HTTP API method with proper parameters. Also, you will authenticate yourself against Infobip platform there, so we can relate the subscriber's token to you. Typically, generating token occurs after your subscribers are authenticated inside your application.
 You will receive the token in response, that you will use to instantiate InfobipRTC client in your web application.
 
 ### Permissions
@@ -31,7 +31,7 @@ There are also 3 permissions with a `normal` protection level that are included 
 After you received token via HTTP API, you are ready to instantiate [`InfobipRTC`](https://github.com/infobip/infobip-rtc-android/wiki/InfobipRTC) client. It can be done using these commands:
 
 ```
-String token = obtainToken(); // here you call '/webrtc/token'
+String token = obtainToken(); // here you call '/webrtc/1/token'
 RTCOptions options = RTCOptions.builder().build();
 Context context = getApplicationContext();
 
