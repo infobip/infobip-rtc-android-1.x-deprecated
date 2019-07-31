@@ -18,7 +18,7 @@ dependencies {
 ```
 
 ### Authentication
-Since Infobip RTC is just SDK, it means you are developing your own application, and you only use Infobip RTC as dependency. Your application has your own users, which we wall call subscribers throughout this guide. So, in order to use Infobip RTC, you need to register your subscribers to our platform. Credentials your subscribers use to connect to your application are irrelevant to Infobip. We only need identity with which they will use to present themselves. And when we have their identity, we can generate a token that you will assign for them to use. With that token, your subscribers can connect to our platform (using Infobip RTC SDK).
+Since Infobip RTC is just SDK, it means you are developing your own application, and you only use Infobip RTC as dependency. Your application has your own users, which we will call subscribers throughout this guide. So, in order to use Infobip RTC, you need to register your subscribers to our platform. Credentials your subscribers use to connect to your application are irrelevant to Infobip. We only need identity with which they will use to present themselves. And when we have their identity, we can generate a token that you will assign for them to use. With that token, your subscribers can connect to our platform (using Infobip RTC SDK).
 
 In order to generate these tokens for your subscribers, you need to call our [`/webrtc/1/token`](https://dev.infobip.com/webrtc/generate-token) HTTP API method with proper parameters. Also, you will authenticate yourself against Infobip platform there, so we can relate the subscriber's token to you. Typically, generating token occurs after your subscribers are authenticated inside your application.
 You will receive the token in response, that you will use to make calls and start listening for incoming calls.
@@ -88,10 +88,28 @@ During the call, you can also mute (and unmute) your audio:
 outgoingCall.mute(true);
 ```
 
+To check if audio is muted, call [`muted`](https://github.com/infobip/infobip-rtc-android/wiki/Call#muted) method like this:
+
+```
+boolean audioMuted = outgoingCall.muted();
+```
+
 Sound can also be played on speakerphone during the call. That option can be toggled as many times as you like, just call [`speakerphone`](https://github.com/infobip/infobip-rtc-android/wiki/Call#speakerphone) method with the appropriate parameter. By the default, it is disabled, you can enable it like this:
 
 ```
 outgoingCall.speakerphone(true);
+```
+
+To check if speakerphone is enabled, call [`speakerphone`](https://github.com/infobip/infobip-rtc-android/wiki/Call#isSpeakerphone) method like this:
+
+```
+boolean speakerphoneEnabled = outgoingCall.speakerphone();
+```
+
+Also, you can check [`call status`](https://github.com/infobip/infobip-rtc-android/wiki/CallStatus):
+
+```
+CallStatus status = outgoingCall.status();
 ```
 
 ### Calling phone number
@@ -141,7 +159,7 @@ class FcmService extends FirebaseMessagingService {
                 public void onIncomingCall(IncomingCallEvent incomingCallEvent) {
                     IncomingCall incomingCall = incomingCallEvent.getIncomingCall();
                     Log.d("WebRTC", "Received incoming call from:  " + incomingCall.source());
-                    incomingCall.addEventListener(new DefaultCallEventListener());
+                    incomingCall.setEventListener(new DefaultCallEventListener());
                     incomingCall.accept(); // or incomingCall.decline();
                 }
             }
@@ -162,13 +180,13 @@ But, those device tokens can change during app lifetime, so you need to handle t
 ```
 
 #### Receiving a call via active connection
-Second way is to connect once via WebSocket connection to our Infobip WebRTC platform, keep it active, and receive calls via it. All that is implemented in our SDK, you just need to call [`startActiveConnection`](https://github.com/infobip/infobip-rtc-android/wiki/InfobipRTC#startActiveConnection) method to actually start listen for incoming calls. Third parameter is listener that will be fired on incoming call.  
+Second way is to connect once via WebSocket connection to our Infobip WebRTC platform, keep it active, and receive calls via it. All that is implemented in our SDK, you just need to call [`registerForActiveConnection`](https://github.com/infobip/infobip-rtc-android/wiki/InfobipRTC#registerForActiveConnection) method to actually start listen for incoming calls. Third parameter is listener that will be fired on incoming call.  
   
 Downside of this approach is that your app will consume significant amount of battery, because it persists connection. First approach is recommended.
 
 ```
 String token = obtainToken();
-InfobipRTC.startActiveConnection(
+InfobipRTC.registerForActiveConnection(
     token,
     getApplicationContext(),
     new IncomingCallEventListener() {
@@ -176,7 +194,7 @@ InfobipRTC.startActiveConnection(
         public void onIncomingCall(IncomingCallEvent incomingCallEvent) {
             IncomingCall incomingCall = incomingCallEvent.getIncomingCall();
             Log.d("WebRTC", "Received incoming call from:  " + incomingCall.source());
-            incomingCall.addEventListener(new DefaultCallEventListener());
+            incomingCall.setEventListener(new DefaultCallEventListener());
             incomingCall.accept(); // or incomingCall.decline();
         }
     }
