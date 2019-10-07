@@ -158,7 +158,7 @@ class FcmService extends FirebaseMessagingService {
                 @Override
                 public void onIncomingCall(IncomingCallEvent incomingCallEvent) {
                     IncomingCall incomingCall = incomingCallEvent.getIncomingCall();
-                    Log.d("WebRTC", "Received incoming call from:  " + incomingCall.source());
+                    Log.d("WebRTC", "Received incoming call from:  " + incomingCall.source().getIdentity() + " " + incomingCall.source().getDisplayName() );
                     incomingCall.setEventListener(new DefaultCallEventListener());
                     incomingCall.accept(); // or incomingCall.decline();
                 }
@@ -193,7 +193,7 @@ InfobipRTC.registerForActiveConnection(
         @Override
         public void onIncomingCall(IncomingCallEvent incomingCallEvent) {
             IncomingCall incomingCall = incomingCallEvent.getIncomingCall();
-            Log.d("WebRTC", "Received incoming call from:  " + incomingCall.source());
+            Log.d("WebRTC", "Received incoming call from:  " + incomingCall.source().getIdentity() + " " + incomingCall.source().getDisplayName() );
             incomingCall.setEventListener(new DefaultCallEventListener());
             incomingCall.accept(); // or incomingCall.decline();
         }
