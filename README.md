@@ -47,6 +47,16 @@ As you can see, [`call`](https://github.com/infobip/infobip-rtc-android/wiki/Inf
 ```
 CallEventListener callEventListener = new CallEventListener() {
     @Override
+    public void onRinging(CallRingingEvent callRingingEvent) {
+        Log.d("WebRTC", "Call is ringing on Alice's device!");
+    }
+
+    @Override
+    public void onEarlyMedia(CallEarlyMediaEvent callEarlyMediaEvent) {
+        Log.d("WebRTC", "Ringback tone received!");
+    }
+
+    @Override
     public void onEstablished(CallEstablishedEvent callEstablishedEvent) {
         Log.d("WebRTC", "Alice answered call!");
     }
@@ -59,11 +69,6 @@ CallEventListener callEventListener = new CallEventListener() {
     @Override
     public void onError(CallErrorEvent callErrorEvent) {
         Log.d("WebRTC", "Oops, something went very wrong! Message: " + callErrorEvent.getReason().toString());
-    }
-
-    @Override
-    public void onRinging(CallRingingEvent callRingingEvent) {
-        Log.d("WebRTC", "Call is ringing on Alice's device!");
     }
 };
 ```
