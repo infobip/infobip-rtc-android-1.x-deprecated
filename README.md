@@ -117,6 +117,15 @@ Also, you can check [`call status`](https://github.com/infobip/infobip-rtc-andro
 CallStatus status = outgoingCall.status();
 ```
 
+Also, you can check information such as [`duration`](https://github.com/infobip/infobip-rtc-android/wiki/Call#duration), [`start time`](https://github.com/infobip/infobip-rtc-android/wiki/Call#startTime), [`establish time`](https://github.com/infobip/infobip-rtc-android/wiki/Call#establishTime) and [`end time`](https://github.com/infobip/infobip-rtc-android/wiki/Call#endTime) by calling these methods:
+
+```
+int duration = outgoingCall.duration();
+Date startTime = outgoingCall.startTime();
+Date establishTime = outgoingCall.establishTime();
+Date endTime = outgoingCall.endTime();
+```
+
 ### Calling phone number
 It is very much similar to calling regular WebRTC user, you just use [`callPhoneNumber`](https://github.com/infobip/infobip-rtc-android/wiki/InfobipRTC#callPhoneNumber) method instead [`call`](https://github.com/infobip/infobip-rtc-android/wiki/InfobipRTC#call). There is also method overload that accepts second parameter, options in which you can define from parameter. It's value will display on calling phone device as Caller ID. Result of [`callPhoneNumber`](https://github.com/infobip/infobip-rtc-android/wiki/InfobipRTC#callPhoneNumber) is also [`OutgoingCall`](https://github.com/infobip/infobip-rtc-android/wiki/OutgoingCall) that you can do everything you could when using the [`call`](https://github.com/infobip/infobip-rtc-android/wiki/InfobipRTC#call) method:
 
