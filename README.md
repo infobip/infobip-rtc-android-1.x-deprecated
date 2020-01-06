@@ -42,6 +42,21 @@ CallRequest callRequest = new CallRequest(
 OutgoingCall call = InfobipRTC.call(callRequest);
 ```
 
+Or if you want to initiate video call:  
+
+```
+String token = obtainToken();
+CallRequest callRequest = new CallRequest(
+    token,
+    getApplicationContext(),
+    "Alice",
+    new DefaultCallEventListener()
+);
+CallOptions callOptions = CallOptions.builder().video(true).build();
+
+OutgoingCall call = InfobipRTC.call(callRequest, callOptions);
+```
+
 As you can see, [`call`](https://github.com/infobip/infobip-rtc-android/wiki/InfobipRTC#call) method returns an instance of [`OutgoingCall`](https://github.com/infobip/infobip-rtc-android/wiki/OutgoingCall) as a result. With it, you can track status of your call and invoke call actions. With `callEventListener` param, you can set-up event handlers, so you can do something when called subscriber answers the call, rejects it, when the call is ended, etc. You set-up event handlers with this code:
 
 ```
@@ -73,7 +88,36 @@ CallEventListener callEventListener = new CallEventListener() {
 };
 ```
 
-A most important part of the call is definitively media that travels across subscribers. It starts flowing after the `established` event is received. You do not have to do anything special to enable media flow (receive caller audio and send your audio to the caller), it will be done automatically.
+The most important part of the call is definitively media that travels across subscribers. It starts flowing after the `established` event is received.
+In case of audio call, you do not have to do anything special to enable media flow (receive caller audio and send your audio to the caller), it will be done automatically.
+In case of video call, you need to attach video track received in `established` event to video UI element. You can use `com.infobip.webrtc.sdk.api.video.VideoRenderer` class to display remote video (and local, if you wish) on UI:  
+```
+<com.infobip.webrtc.sdk.api.video.VideoRenderer
+  android:id="@+id/remote_video"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content" />
+```
+Then, in your code, set up this renderer:  
+```
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+    //...
+    VideoRenderer remoteVideoRenderer = findViewById(R.id.remote_video);
+    remoteVideoRenderer.init();
+    remoteVideoRenderer.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FIT); // choose scaling type that best fits your needs
+}
+```
+When `established` event is received, connect video track to renderer:  
+```
+@Override
+public void onEstablished(CallEstablishedEvent callEstablishedEvent) {
+    Log.d("WebRTC", "Alice answered call!");
+    VideoRenderer remoteVideoRenderer = findViewById(R.id.remote_video);
+    RTCVideoTrack remoteRTCVideoTrack = callEstablishedEvent.getRemoteRTCVideoTrack();
+    remoteRTCVideoTrack.addSink(remoteVideoRenderer);
+    // do same for local video, if needed
+}
+```
 
 When event handlers are set-up and call is established, there are few things that you can do with the actual call. One of them, of course, is to hangup. That can be done via [`hangup`](https://github.com/infobip/infobip-rtc-android/wiki/Call#hangup) method on call, and after that, both parties will receive `hangup` event upon hangup completion.
 
