@@ -1,13 +1,13 @@
 ### Introduction
-Infobip RTC is an Android SDK which enables you to take advantage of Infobip's WebRTC platform. It gives you the ability to enrich your Android applications with real-time communications in minimum time while focusing on your application's user experience and business logic. We currently support audio calls between two WebRTC users and phone calls between WebRTC user and actual phone device.
+Infobip RTC is an Android SDK which enables you to take advantage of Infobip Voice platform since it gives you the ability to enrich your Android applications with real-time communications in minimum time, allowing you to focus on your application's user experience and business logic. We currently support audio calls between two web or app users, and phone calls between web or app user and an actual phone device.
 
-Here you will find an overview and quick guide on how to connect to Infobip WebRTC platform. There is also in-depth reference documentation available.
+Here you will find an overview and a quick guide on how to connect to Infobip Voice platform. There is also an in-depth reference documentation available.
 
 ### First-time setup
-In order to use Infobip RTC, you need to have WebRTC enabled on your account, and that's it! You are ready to make WebRTC calls. Please contact your account manager to enable WebRTC.
+In order to use Infobip RTC, you need to have Web and In-app Voice enabled on your account and that's it! You are ready to make web and in-app voice calls. Please contact your account manager to enable Web and In-app Voice.
 
 ### Getting SDK
-You can get a distribution of our SDK through Gradle dependency that you will pull from jCenter maven repository. Just add this snippet to your `build.gradle`:
+You can get our SDK through Gradle dependency which you pull from the jCenter maven repository. Just add this snippet to your `build.gradle`:
 ```
 dependencies {
     ...
@@ -18,17 +18,16 @@ dependencies {
 ```
 
 ### Authentication
-Since Infobip RTC is just SDK, it means you are developing your own application, and you only use Infobip RTC as dependency. Your application has your own users, which we will call subscribers throughout this guide. So, in order to use Infobip RTC, you need to register your subscribers to our platform. Credentials your subscribers use to connect to your application are irrelevant to Infobip. We only need identity with which they will use to present themselves. And when we have their identity, we can generate a token that you will assign for them to use. With that token, your subscribers can connect to our platform (using Infobip RTC SDK).
+Since Infobip RTC is an SDK, it means you develop your own application, and you only use Infobip RTC as a dependency. Your application has your own users which we will call subscribers throughout this guide. So, in order to use Infobip RTC, you need to register your subscribers on our platform. The credentials your subscribers use to connect to your application are irrelevant to Infobip. We only need the identity they will use to present themselves. And when we have their identity, we can generate a token which you assign to them. With that token, your subscribers can connect to our platform (using Infobip RTC SDK).
 
-In order to generate these tokens for your subscribers, you need to call our [`/webrtc/1/token`](https://dev.infobip.com/webrtc/generate-token) HTTP API method with proper parameters. Also, you will authenticate yourself against Infobip platform there, so we can relate the subscriber's token to you. Typically, generating token occurs after your subscribers are authenticated inside your application.
-You will receive the token in response, that you will use to make calls and start listening for incoming calls.
+To generate these tokens for your subscribers, you need to call our [`/webrtc/1/token`](https://dev.infobip.com/webrtc/generate-token) HTTP API method using proper parameters. There you authenticate yourself against Infobip platform, so we can relate the subscriber's token to you. Typically, generating a token occurs after your subscribers are authenticated inside your application. You will receive the token in a response that you will use to make calls and start listening for incoming calls.
 
 ### Permissions
-The only permission with `dangerous` protection level SDK needs is [`RECORD_AUDIO`](https://developer.android.com/reference/android/Manifest.permission.html#RECORD_AUDIO). That means you need to ask for it in runtime, inside your application. [Here](https://developer.android.com/training/permissions/requesting) is how you can do that.  
-There are also 3 permissions with a `normal` protection level that are included in SDK's manifest: [`ACCESS_NETWORK_STATE`](https://developer.android.com/reference/android/Manifest.permission.html#ACCESS_NETWORK_STATE), [`INTERNET`](https://developer.android.com/reference/android/Manifest.permission.html#INTERNET), [`MODIFY_AUDIO_SETTINGS`](https://developer.android.com/reference/android/Manifest.permission.html#MODIFY_AUDIO_SETTINGS).
+The only `dangerous` SDK permission needed is the [`RECORD_AUDIO`](https://developer.android.com/reference/android/Manifest.permission.html#RECORD_AUDIO) permission. That means you need to ask for it in runtime, inside your application. Here is how you can do [that](https://developer.android.com/reference/android/Manifest.permission.html#RECORD_AUDIO). 
+There are also three permissions with the `normal` protection level that are included in the SDK's manifest: [`ACCESS_NETWORK_STATE`](https://developer.android.com/reference/android/Manifest.permission.html#ACCESS_NETWORK_STATE), [`INTERNET`](https://developer.android.com/reference/android/Manifest.permission.html#INTERNET), [`MODIFY_AUDIO_SETTINGS`](https://developer.android.com/reference/android/Manifest.permission.html#MODIFY_AUDIO_SETTINGS).
 
 ### Making a call
-You can call another WebRTC subscriber, if you know it's identity. It is done via [`call`](https://github.com/infobip/infobip-rtc-android/wiki/InfobipRTC#call) method:
+You can call another subscriber if you know their identity. It is done via [`call`](https://github.com/infobip/infobip-rtc-android/wiki/InfobipRTC#call) method:
 
 ```
 String token = obtainToken();
@@ -57,7 +56,7 @@ CallOptions callOptions = CallOptions.builder().video(true).build();
 OutgoingCall call = InfobipRTC.call(callRequest, callOptions);
 ```
 
-As you can see, [`call`](https://github.com/infobip/infobip-rtc-android/wiki/InfobipRTC#call) method returns an instance of [`OutgoingCall`](https://github.com/infobip/infobip-rtc-android/wiki/OutgoingCall) as a result. With it, you can track status of your call and invoke call actions. With `callEventListener` param, you can set-up event handlers, so you can do something when called subscriber answers the call, rejects it, when the call is ended, etc. You set-up event handlers with this code:
+As you can see, [`call`](https://github.com/infobip/infobip-rtc-android/wiki/InfobipRTC#call) method returns an instance of [`OutgoingCall`](https://github.com/infobip/infobip-rtc-android/wiki/OutgoingCall) as a result. With it, you can track status of your call and invoke call actions. The `callEventListener` parameter, let’s you set up event handlers, so you can perform something when the called subscriber answers the call, rejects it, the call is ended, etc. You set up event handlers with the following code:
 
 ```
 CallEventListener callEventListener = new CallEventListener() {
@@ -88,8 +87,8 @@ CallEventListener callEventListener = new CallEventListener() {
 };
 ```
 
-The most important part of the call is definitively media that travels across subscribers. It starts flowing after the `established` event is received.
-In case of audio call, you do not have to do anything special to enable media flow (receive caller audio and send your audio to the caller), it will be done automatically.
+The most important part of the call is definitely the media that travels between subscribers. It starts after the `established` event is received.
+In case of audio call, you don’t have to do anything to enable the media flow (receive caller audio and send your audio to the caller), it is done automatically.
 In case of video call, you need to attach video track received in `established` event to video UI element. You can use `com.infobip.webrtc.sdk.api.video.VideoRenderer` class to display remote video (and local, if you wish) on UI:  
 ```
 <com.infobip.webrtc.sdk.api.video.VideoRenderer
@@ -119,13 +118,13 @@ public void onEstablished(CallEstablishedEvent callEstablishedEvent) {
 }
 ```
 
-When event handlers are set-up and call is established, there are few things that you can do with the actual call. One of them, of course, is to hangup. That can be done via [`hangup`](https://github.com/infobip/infobip-rtc-android/wiki/Call#hangup) method on call, and after that, both parties will receive `hangup` event upon hangup completion.
+When event handlers are set up and the call is established, there are a few things that you can do with the actual call. One of them, of course, is to hang up. That can be done via the [`hangup`](https://github.com/infobip/infobip-rtc-android/wiki/Call#hangup) method on the call, and after that, both parties receive `hangup` event upon hang up completion.
 
 ```
 outgoingCall.hangup();
 ```
 
-You can simulate digit press during the call, by sending DTMF codes (Dual-Tone Multi-Frequency). It is achieved via [`sendDTMF`](https://github.com/infobip/infobip-rtc-android/wiki/Call#sendDTMF) method. Valid DTMF codes are digits `0`-`9`, `*` and `#`.
+You can simulate a digit press during the call, by sending DTMF codes (Dual-Tone Multi-Frequency). This is achieved via [`sendDTMF`](https://github.com/infobip/infobip-rtc-android/wiki/Call#sendDTMF) method. Valid DTMF codes are digits from `0`-`9`, `*` and `#`.
 
 ```
 outgoingCall.sendDTMF("*");
@@ -137,25 +136,25 @@ During the call, you can also mute (and unmute) your audio:
 outgoingCall.mute(true);
 ```
 
-To check if audio is muted, call [`muted`](https://github.com/infobip/infobip-rtc-android/wiki/Call#muted) method like this:
+To check if audio is muted, call [`muted`](https://github.com/infobip/infobip-rtc-android/wiki/Call#muted) method in the following manner:
 
 ```
 boolean audioMuted = outgoingCall.muted();
 ```
 
-Sound can also be played on speakerphone during the call. That option can be toggled as many times as you like, just call [`speakerphone`](https://github.com/infobip/infobip-rtc-android/wiki/Call#speakerphone) method with the appropriate parameter. By the default, it is disabled, you can enable it like this:
+Sound can also be played on speakerphone during the call. That option can be toggled as many times as you like, just call the [`speakerphone`](https://github.com/infobip/infobip-rtc-android/wiki/Call#speakerphone) method with the appropriate parameter. By default, it is disabled, you can enable it as shown below:
 
 ```
 outgoingCall.speakerphone(true);
 ```
 
-To check if speakerphone is enabled, call [`speakerphone`](https://github.com/infobip/infobip-rtc-android/wiki/Call#isSpeakerphone) method like this:
+To check if the speakerphone is enabled, call the [`speakerphone`](https://github.com/infobip/infobip-rtc-android/wiki/Call#isSpeakerphone) method as shown in the example below:
 
 ```
 boolean speakerphoneEnabled = outgoingCall.speakerphone();
 ```
 
-Also, you can check [`call status`](https://github.com/infobip/infobip-rtc-android/wiki/CallStatus):
+Also, you can check the [`call status`](https://github.com/infobip/infobip-rtc-android/wiki/CallStatus):
 
 ```
 CallStatus status = outgoingCall.status();
@@ -171,7 +170,7 @@ Date endTime = outgoingCall.endTime();
 ```
 
 ### Calling phone number
-It is very much similar to calling regular WebRTC user, you just use [`callPhoneNumber`](https://github.com/infobip/infobip-rtc-android/wiki/InfobipRTC#callPhoneNumber) method instead [`call`](https://github.com/infobip/infobip-rtc-android/wiki/InfobipRTC#call). There is also method overload that accepts second parameter, options in which you can define from parameter. It's value will display on calling phone device as Caller ID. Result of [`callPhoneNumber`](https://github.com/infobip/infobip-rtc-android/wiki/InfobipRTC#callPhoneNumber) is also [`OutgoingCall`](https://github.com/infobip/infobip-rtc-android/wiki/OutgoingCall) that you can do everything you could when using the [`call`](https://github.com/infobip/infobip-rtc-android/wiki/InfobipRTC#call) method:
+It is very much similar to calling a regular WebRTC user, you just use the [`callPhoneNumber`](https://github.com/infobip/infobip-rtc-android/wiki/InfobipRTC#callPhoneNumber) method instead of a [`call`](https://github.com/infobip/infobip-rtc-android/wiki/InfobipRTC#call). There is also the method overload that accepts a second parameter, where you can define the "from" parameter. Its value will display the calling phone device as the Caller ID. The result of the [`callPhoneNumber`](https://github.com/infobip/infobip-rtc-android/wiki/InfobipRTC#callPhoneNumber) is also the [`OutgoingCall`](https://github.com/infobip/infobip-rtc-android/wiki/OutgoingCall) with which you can do everything as when using the [`call`](https://github.com/infobip/infobip-rtc-android/wiki/InfobipRTC#call) method:
 
 ```
 String token = obtainToken();
@@ -187,14 +186,14 @@ OutgoingCall call = InfobipRTC.callPhoneNumber(callRequest, callPhoneNumberOptio
 ```
 
 ### Receiving a call
-There are two ways of being able to receive a call. Each one requires you starting listening for incoming calls.
+There are two ways of receiving a call. Each one requires you to listen for incoming calls.
 
 #### Receiving a call via push notification
-First way is listening for push notifications, that we will send from our Infobip WebRTC platform on your behalf to correct device. In that case you need to provide us your server key, so we can send push notifications on your behalf. That can be achieved by contacting your account manager. Then, you handle them in your application by extending [`FirebaseMessagingService`](https://firebase.google.com/docs/reference/android/com/google/firebase/messaging/FirebaseMessagingService) and overriding `onMessageReceived` method. There you can relay push notification to our SDK via [`handleIncomingCall`](https://github.com/infobip/infobip-rtc-android/wiki/InfobipRTC#handleIncomingCall) method. [Here](https://firebase.google.com/docs/android/setup) you can find complete tutorial on how to add Firebase to your app.
+The first way is to listen for push notifications which we send from our Infobip Voice platform on your behalf to the correct device and in that case you need to provide us your server key. You can do that by contacting your account manager. After that, you handle them in your application by extending [`FirebaseMessagingService`](https://firebase.google.com/docs/reference/android/com/google/firebase/messaging/FirebaseMessagingService) and overriding the `onMessageReceived` method. There you can relay push notification to our SDK via [`handleIncomingCall`](https://github.com/infobip/infobip-rtc-android/wiki/InfobipRTC#handleIncomingCall) method. [Here](https://firebase.google.com/docs/android/setup) you can find complete tutorial on how to add Firebase to your app.
   
-This is recommended approach since it does not use much battery, because connection is not kept alive, it only listens for incoming push notifications.  
+This is the recommended approach since it doesn’t use much battery, as the connection is not kept alive, it only listens for incoming push notifications.  
   
-This is an example how you start listening to push notifications:
+This is an example how to listen for push notifications:
 ```
 String token = obtainToken();
 InfobipRTC.enablePushNotification(
@@ -203,7 +202,7 @@ InfobipRTC.enablePushNotification(
 );
 ```
 
-And then, you can handle it in your application like this:
+And then, you can handle that in your application as shown below:
 ```
 class FcmService extends FirebaseMessagingService {
     @Override
@@ -225,10 +224,10 @@ class FcmService extends FirebaseMessagingService {
     }
 }
 ```
-If you take a closer look at how to implement FCM in you application, you will see that there is unique device token associated with one app install on single device.  
-When you call [`enablePushNotification`](https://github.com/infobip/infobip-rtc-android/wiki/InfobipRTC#enablePushNotification) method on a device, we take that device's token, and associate it with identity on our Infobip WebRTC platform.  
+If you take a closer look at how to implement FCM in your application, you will see that there is a unique device token associated with one app installation on a single device. 
+When you call the [`enablePushNotification`](https://github.com/infobip/infobip-rtc-android/wiki/InfobipRTC#enablePushNotification) method on a device, we take that device's token and associate it with an identity on our Infobip WebRTC platform.
 
-But, those device tokens can change during app lifetime, so you need to handle those changes. We implemented Android service named `FcmTokenRefresher` that handles changes, you just need to include it in your app's manifest:
+As device tokens can change during app lifetime, you need to handle these changes. We implemented an Android service named `FcmTokenRefresher` that handles changes, you just need to include it in your app's manifest:
 ```
 <application>
     <service
@@ -238,9 +237,9 @@ But, those device tokens can change during app lifetime, so you need to handle t
 ```
 
 #### Receiving a call via active connection
-Second way is to connect once via WebSocket connection to our Infobip WebRTC platform, keep it active, and receive calls via it. All that is implemented in our SDK, you just need to call [`registerForActiveConnection`](https://github.com/infobip/infobip-rtc-android/wiki/InfobipRTC#registerForActiveConnection) method to actually start listen for incoming calls. Third parameter is listener that will be fired on incoming call.  
-  
-Downside of this approach is that your app will consume significant amount of battery, because it persists connection. First approach is recommended.
+The second way to receive a call is to connect once via WebSocket connection to our Infobip WebRTC platform, keep it active, and receive calls via that connection. All this is implemented in our SDK, you just need to call the [`registerForActiveConnection`](https://github.com/infobip/infobip-rtc-android/wiki/InfobipRTC#registerForActiveConnection) method to actually start listening for incoming calls. The third parameter is the listener that is fired upon the incoming call. 
+
+The downside of this approach is that your app will consume a significant amount of battery, because it persists the connection. We recommend the first approach.
 
 ```
 String token = obtainToken();
