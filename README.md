@@ -258,4 +258,19 @@ InfobipRTC.registerForActiveConnection(
 );
 ```
 
+### Supported API Levels
 
+The SDK supports Android API Level 21 (Lollipop) and higher.
+
+### Java Compatibility
+
+The SDK source and target compatibility is set to Java 8. Reference the following snippet:
+
+```
+android {
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
+}
+```
