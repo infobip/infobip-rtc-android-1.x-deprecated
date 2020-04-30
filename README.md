@@ -1,5 +1,5 @@
 ### Introduction
-Infobip RTC is an Android SDK which enables you to take advantage of Infobip Voice platform since it gives you the ability to enrich your Android applications with real-time communications in minimum time, allowing you to focus on your application's user experience and business logic. We currently support audio calls between two web or app users, and phone calls between web or app user and an actual phone device.
+Infobip RTC is an Android SDK which enables you to take advantage of Infobip Voice platform since it gives you the ability to enrich your Android applications with real-time communications in minimum time, allowing you to focus on your application's user experience and business logic. We currently support audio and video calls between two web or app users, and phone calls between web or app user and an actual phone device.
 
 Here you will find an overview and a quick guide on how to connect to Infobip Voice platform. There is also an in-depth reference documentation available.
 
