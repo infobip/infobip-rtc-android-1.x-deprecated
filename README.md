@@ -1,10 +1,10 @@
 ### Introduction
-Infobip RTC is an Android SDK which enables you to take advantage of Infobip Voice platform since it gives you the ability to enrich your Android applications with real-time communications in minimum time, allowing you to focus on your application's user experience and business logic. We currently support audio and video calls between two web or app users, and phone calls between web or app user and an actual phone device.
+Infobip RTC is an Android SDK which enables you to take advantage of Infobip platform since it gives you the ability to enrich your Android applications with real-time communications in minimum time, allowing you to focus on your application's user experience and business logic. We currently support audio and video calls between two web or app users, and phone calls between web or app user and an actual phone device.
 
-Here you will find an overview and a quick guide on how to connect to Infobip Voice platform. There is also an in-depth reference documentation available.
+Here you will find an overview and a quick guide on how to connect to Infobip platform. There is also an in-depth reference documentation available.
 
 ### First-time setup
-In order to use Infobip RTC, you need to have Web and In-app Voice enabled on your account and that's it! You are ready to make web and in-app voice calls. Please contact your account manager to enable Web and In-app Voice.
+In order to use Infobip RTC, you need to have Web and In-app Calls enabled on your account and that's it! You are ready to make web and in-app calls. Please contact your account manager to enable Web and In-app Voice.
 
 ### Getting SDK
 You can get our SDK through Gradle dependency which you pull from the jCenter maven repository. Just add this snippet to your `build.gradle`:
@@ -190,7 +190,7 @@ OutgoingCall call = InfobipRTC.callPhoneNumber(callRequest, callPhoneNumberOptio
 There are two ways of receiving a call. Each one requires you to listen for incoming calls.
 
 #### Receiving a call via push notification
-The first way is to listen for push notifications which we send from our Infobip Voice platform on your behalf to the correct device and in that case you need to provide us your server key. You can do that by contacting your account manager. After that, you handle them in your application by extending [`FirebaseMessagingService`](https://firebase.google.com/docs/reference/android/com/google/firebase/messaging/FirebaseMessagingService) and overriding the `onMessageReceived` method. There you can relay push notification to our SDK via [`handleIncomingCall`](https://github.com/infobip/infobip-rtc-android/wiki/InfobipRTC#handleIncomingCall) method. [Here](https://firebase.google.com/docs/android/setup) you can find complete tutorial on how to add Firebase to your app.
+The first way is to listen for push notifications which we send from our platform on your behalf to the correct device and in that case you need to provide us your server key. You can do that by contacting your account manager. After that, you handle them in your application by extending [`FirebaseMessagingService`](https://firebase.google.com/docs/reference/android/com/google/firebase/messaging/FirebaseMessagingService) and overriding the `onMessageReceived` method. There you can relay push notification to our SDK via [`handleIncomingCall`](https://github.com/infobip/infobip-rtc-android/wiki/InfobipRTC#handleIncomingCall) method. [Here](https://firebase.google.com/docs/android/setup) you can find complete tutorial on how to add Firebase to your app.
   
 This is the recommended approach since it doesn’t use much battery, as the connection is not kept alive, it only listens for incoming push notifications.  
   
