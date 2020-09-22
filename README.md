@@ -4,7 +4,7 @@ Infobip RTC is an Android SDK which enables you to take advantage of Infobip pla
 Here you will find an overview and a quick guide on how to connect to Infobip platform. There is also an in-depth reference documentation available.
 
 ### First-time setup
-In order to use Infobip RTC, you need to have Web and In-app Calls enabled on your account and that's it! You are ready to make web and in-app calls. To learn how to enable them see [the documentation](https://www.infobip.com/docs/voice-and-video/web-and-in-app-calls#set-up-web-and-in-app-calls).
+In order to use Infobip RTC, you need to have Web and In-app Calls enabled on your account and that's it! You are ready to make Web and In-app calls. To learn how to enable them see [the documentation](https://www.infobip.com/docs/voice-and-video/web-and-in-app-calls#set-up-web-and-in-app-calls).
 
 ### Getting SDK
 You can get our SDK through Gradle dependency which you pull from the jCenter maven repository. Just add this snippet to your `build.gradle`:
@@ -18,9 +18,10 @@ dependencies {
 ```
 
 ### Authentication
-Since Infobip RTC is an SDK, it means you develop your own application, and you only use Infobip RTC as a dependency. Your application has your own users which we will call subscribers throughout this guide. So, in order to use Infobip RTC, you need to register your subscribers on our platform. The credentials your subscribers use to connect to your application are irrelevant to Infobip. We only need the identity they will use to present themselves. And when we have their identity, we can generate a token which you assign to them. With that token, your subscribers can connect to our platform (using Infobip RTC SDK).
+Since Infobip RTC is an SDK, it means you develop your own application, and you only use Infobip RTC as a dependency. Your application has your own users, which we will call subscribers throughout this guide. So, in order to use Infobip RTC, you need to register your subscribers on our platform. The credentials your subscribers use to connect to your application are irrelevant to Infobip. We only need the identity they will use to present themselves. When we have the subscriber's identity, we can generate a token assigned to that specific subscriber. With that token, your subscribers can connect to our platform (using Infobip RTC SDK).
 
-To generate these tokens for your subscribers, you need to call our [`/webrtc/1/token`](https://dev.infobip.com/webrtc/generate-token) HTTP API method using proper parameters. There you authenticate yourself against Infobip platform, so we can relate the subscriber's token to you. Typically, generating a token occurs after your subscribers are authenticated inside your application. You will receive the token in a response that you will use to make calls and start listening for incoming calls.
+To generate these tokens for your subscribers, you need to call our [`/webrtc/1/token`](https://dev.infobip.com/webrtc/generate-token) HTTP API method using proper parameters. There you authenticate yourself against Infobip platform, so we can relate the subscriber's token to you. Typically, generating a token occurs after your subscribers are authenticated inside your application.
+You will receive the token in a response that you will use to make and receive calls via  [`InfobipRTC`](https://github.com/infobip/infobip-rtc-android/wiki/InfobipRTC) client in your Android application.
 
 ### Permissions
 The only `dangerous` SDK permissions needed are the [`RECORD_AUDIO`](https://developer.android.com/reference/android/Manifest.permission.html#RECORD_AUDIO) and [`CAMERA`](https://developer.android.com/reference/android/Manifest.permission#CAMERA) permissions. 
