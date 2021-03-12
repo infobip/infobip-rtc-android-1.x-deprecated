@@ -262,6 +262,98 @@ InfobipRTC.registerForActiveConnection(
 );
 ```
 
+### Conference call
+
+You can have a conference call with other participants that are also in the same conference room. The conference call will start as soon as at least one participant joins.
+
+Joining the room is done via the [`joinConference`](https://github.com/infobip/infobip-rtc-android/wiki/InfobipRTC#joinConference) method:
+
+```
+String token = obtainToken();
+String conferenceId = "conference-demo"
+ConferenceRequest conferenceRequest = new ConferenceRequest(
+    getApplicationContext(), 
+    conferenceId, 
+    token, 
+    new ConferenceEventListener() { 
+        @Override
+        public void onJoined(JoinedEvent joinedEvent) {
+            Toast.makeText(getApplicationContext(), "You have joined the conference!", Toast.LENGTH_LONG);
+        }
+    
+        @Override
+        public void onLeft(LeftEvent leftEvent) {
+            Toast.makeText(getApplicationContext(), "You left the conference!", Toast.LENGTH_LONG);
+        }
+    
+        @Override
+        public void onUserJoined(UserJoinedEvent userJoinedEvent) {
+            Toast.makeText(getApplicationContext(), userJoinedEvent.getUser().getIdentity() + " joined the conference!", Toast.LENGTH_LONG);
+        }
+    
+        @Override
+        public void onUserMuted(UserMutedEvent userMutedEvent) {
+            Toast.makeText(getApplicationContext(), userMutedEvent.getIdentity() + " muted himself!", Toast.LENGTH_LONG);
+        }
+    
+        @Override
+        public void onUserUnmuted(UserUnmutedEvent userUnmutedEvent) {
+            Toast.makeText(getApplicationContext(), userMutedEvent.getIdentity() + " unmuted himself!", Toast.LENGTH_LONG);
+        }
+    
+        @Override
+        public void onUserLeft(UserLeftEvent userLeftEvent) {
+            Toast.makeText(getApplicationContext(), userMutedEvent.getIdentity() + " left the conference!", Toast.LENGTH_LONG);
+        }
+    
+        @Override
+        public void onError(ErrorEvent errorEvent) {
+            Toast.makeText(getApplicationContext(), "Conference error!", Toast.LENGTH_LONG);
+        }
+    };);
+    Conference conference = InfobipRTC.joinConference(conferenceRequest);
+```
+
+After the user successfully joined the conference, the [`JoinedEvent`](https://github.com/infobip/infobip-rtc-android/wiki/JoinedEvent) event with a list of `users` that are already in that conference room, will be emitted, so that you can show those users on his screen.
+And also, the rest of the users will receive [`UserJoinedEvent`](https://github.com/infobip/infobip-rtc-android/wiki/UserJoinedEvent) event, with information about the user that just joined the conference, so that you could show that user on their screens.
+
+When you made [`ConferenceRequest`](https://github.com/infobip/infobip-rtc-android/wiki/ConferenceRequest), you have already implemented [`ConferenceEventListener`](https://github.com/infobip/infobip-rtc-android/wiki/ConferenceEventListener) as an event handler for these events.
+
+As you can see, the [`joinConference`](https://github.com/infobip/infobip-rtc-android/wiki/InfobipRTC#joinConference) method returns an instance of [`Conference`](https://github.com/infobip/infobip-rtc-android/wiki/Conference) as the result.
+With it, you can track the status of your conference call and there are a few actions (mute, leave, speakerphone...) that you can do with the actual conference.
+
+Leaving the conference might be done via the [`leave`](https://github.com/infobip/infobip-rtc-android/wiki/Conference#leave) method at the conference. On the side of the other participants, the [`UserLeftEvent`](https://github.com/infobip/infobip-rtc-android/wiki/UserLeftEvent) event will be fired upon leave completion.
+
+```
+conference.leave();
+```
+
+During the conference call, you can also mute (and unmute) your audio, by calling the [`mute(shouldMute)`](https://github.com/infobip/infobip-rtc-android/wiki/Conference#mute) method in the following way:
+
+```
+conference.mute(true);
+```
+
+On the side of the other participants, the [`UserMutedEvent`](https://github.com/infobip/infobip-rtc-android/wiki/UserMutedEvent) or [`UserUnmutedEvent`](https://github.com/infobip/infobip-rtc-android/wiki/UserUnmutedEvent) event will be fired.
+
+To check if the audio is muted, call the [`muted()`](https://github.com/infobip/infobip-rtc-android/wiki/Conference#muted) method in the following way:
+
+```
+boolean audioMuted = conference.muted();
+```
+
+During the conference call, you can play the audio on speakerphone, by calling the [`speakerphone(enabled)`](https://github.com/infobip/infobip-rtc-android/wiki/Conference#speakerphone) method in the following way:
+
+```
+conference.speakerphone(true);
+```
+
+To check if the audio is on speakerphone, call the [`speakerphone()`](https://github.com/infobip/infobip-rtc-android/wiki/Conference#speakerphone) method in the following way:
+
+```
+boolean speakerphone = conference.speakerphone();
+```
+
 ### Supported API Levels
 
 The SDK supports Android API Level 21 (Lollipop) and higher.
