@@ -18,7 +18,6 @@ You can get our SDK through Gradle dependency which you pull from the Maven Cent
 
 ```groovy
 dependencies {
-    ...
     implementation ('com.infobip:infobip-rtc:+@aar') {
             transitive = true
     }
@@ -90,9 +89,11 @@ OutgoingCall call = InfobipRTC.call(callRequest, callOptions);
 As you can see, [`call`](https://github.com/infobip/infobip-rtc-android/wiki/InfobipRTC#call) method returns an instance of
 [`OutgoingCall`](https://github.com/infobip/infobip-rtc-android/wiki/OutgoingCall) as a result.
 With it, you can track status of your call and invoke call actions.
-The `callEventListener` parameter, lets you set up event handlers,
-so you can perform something when the called subscriber answers the call, rejects it, the call is ended, etc.
-You set up event handlers with the following code:
+
+In order to respond to certain actions during the call, you need to set up event handlers.
+You can forward said listener through the parameter `callEventListener` in the call request when making a call (as shown in previous example), 
+or you can set it up when call is created via the [`setEventListener`](https://github.com/infobip/infobip-rtc-android/wiki/Call#setEventListener) 
+method as shown in the following example:
 
 ```java
 CallEventListener callEventListener = new CallEventListener() {
@@ -121,6 +122,14 @@ CallEventListener callEventListener = new CallEventListener() {
         Log.d("WebRTC", "Oops, something went very wrong! Message: " + callErrorEvent.getReason().toString());
     }
 };
+
+outgoingCall.setEventListener(callEventListener);
+```
+
+To get the current event listener, use the [`getEventListener`](https://github.com/infobip/infobip-rtc-android/wiki/Call#getEventListener) method:
+
+```java
+CallEventListener callEventListener = outgoingCall.getEventListener();
 ```
 
 The most important part of the call is definitely the media that travels between subscribers. It starts after the `established` event is received.
@@ -358,44 +367,10 @@ String conferenceId = "conference-demo"
 ConferenceRequest conferenceRequest = new ConferenceRequest(
     getApplicationContext(), 
     conferenceId, 
-    token, 
-    new ConferenceEventListener() { 
-        @Override
-        public void onJoined(JoinedEvent joinedEvent) {
-            Toast.makeText(getApplicationContext(), "You have joined the conference!", Toast.LENGTH_LONG);
-        }
-    
-        @Override
-        public void onLeft(LeftEvent leftEvent) {
-            Toast.makeText(getApplicationContext(), "You left the conference!", Toast.LENGTH_LONG);
-        }
-    
-        @Override
-        public void onUserJoined(UserJoinedEvent userJoinedEvent) {
-            Toast.makeText(getApplicationContext(), userJoinedEvent.getUser().getIdentity() + " joined the conference!", Toast.LENGTH_LONG);
-        }
-    
-        @Override
-        public void onUserMuted(UserMutedEvent userMutedEvent) {
-            Toast.makeText(getApplicationContext(), userMutedEvent.getIdentity() + " muted himself!", Toast.LENGTH_LONG);
-        }
-    
-        @Override
-        public void onUserUnmuted(UserUnmutedEvent userUnmutedEvent) {
-            Toast.makeText(getApplicationContext(), userMutedEvent.getIdentity() + " unmuted himself!", Toast.LENGTH_LONG);
-        }
-    
-        @Override
-        public void onUserLeft(UserLeftEvent userLeftEvent) {
-            Toast.makeText(getApplicationContext(), userMutedEvent.getIdentity() + " left the conference!", Toast.LENGTH_LONG);
-        }
-    
-        @Override
-        public void onError(ErrorEvent errorEvent) {
-            Toast.makeText(getApplicationContext(), "Conference error!", Toast.LENGTH_LONG);
-        }
-    };);
-    Conference conference = InfobipRTC.joinConference(conferenceRequest);
+    token,
+    new DefaultConferenceEventListener()
+);
+Conference conference = InfobipRTC.joinConference(conferenceRequest);
 ```
 
 After the user successfully joined the conference, the [`JoinedEvent`](https://github.com/infobip/infobip-rtc-android/wiki/JoinedEvent) event with a list of
@@ -403,14 +378,63 @@ After the user successfully joined the conference, the [`JoinedEvent`](https://g
 Also, the rest of the users will receive [`UserJoinedEvent`](https://github.com/infobip/infobip-rtc-android/wiki/UserJoinedEvent) event,
 with information about the user that just joined the conference, so that you could show that user on their screens.
 
-When you made [`ConferenceRequest`](https://github.com/infobip/infobip-rtc-android/wiki/ConferenceRequest), you have already implemented
-[`ConferenceEventListener`](https://github.com/infobip/infobip-rtc-android/wiki/ConferenceEventListener) as an event handler for these events.
-
 As you can see, the [`joinConference`](https://github.com/infobip/infobip-rtc-android/wiki/InfobipRTC#joinConference) method returns an instance of
 [`Conference`](https://github.com/infobip/infobip-rtc-android/wiki/Conference) as the result.
 With it, you can track the status of your conference call and there are a few actions (mute, leave, speakerphone...) that you can do with the actual conference.
 
-Leaving the conference might be done via the [`leave`](https://github.com/infobip/infobip-rtc-android/wiki/Conference#leave) method at the conference.
+In order to respond to certain actions during the conference call, you need to set up event handlers.
+You can forward said listener through the parameter `conferenceEventListener` in the conference request when joining a conference (as shown in previous example),
+or you can set it up when conference call is created via the [`setEventListener`](https://github.com/infobip/infobip-rtc-android/wiki/Conference#setEventListener)
+method as shown in the following example:
+
+```java
+ConferenceEventListener conferenceEventListener = new ConferenceEventListener() {
+    @Override
+    public void onJoined(JoinedEvent joinedEvent) {
+        Toast.makeText(getApplicationContext(), "You have joined the conference!", Toast.LENGTH_LONG);
+    }
+    
+    @Override
+    public void onLeft(LeftEvent leftEvent) {
+        Toast.makeText(getApplicationContext(), "You left the conference!", Toast.LENGTH_LONG);
+    }
+    
+    @Override
+    public void onUserJoined(UserJoinedEvent userJoinedEvent) {
+        Toast.makeText(getApplicationContext(), userJoinedEvent.getUser().getIdentity() + " joined the conference!", Toast.LENGTH_LONG);
+    }
+    
+    @Override
+    public void onUserMuted(UserMutedEvent userMutedEvent) {
+        Toast.makeText(getApplicationContext(), userMutedEvent.getIdentity() + " muted himself!", Toast.LENGTH_LONG);
+    }
+    
+    @Override
+    public void onUserUnmuted(UserUnmutedEvent userUnmutedEvent) {
+        Toast.makeText(getApplicationContext(), userMutedEvent.getIdentity() + " unmuted himself!", Toast.LENGTH_LONG);
+    }
+    
+    @Override
+    public void onUserLeft(UserLeftEvent userLeftEvent) {
+        Toast.makeText(getApplicationContext(), userMutedEvent.getIdentity() + " left the conference!", Toast.LENGTH_LONG);
+    }
+    
+    @Override
+    public void onError(ErrorEvent errorEvent) {
+        Toast.makeText(getApplicationContext(), "Conference error!", Toast.LENGTH_LONG);
+    }
+};
+
+conference.setEventListener(conferenceEventListener);
+```
+
+To get the current event listener, use the [`getEventListener`](https://github.com/infobip/infobip-rtc-android/wiki/Conference#getEventListener) method:
+
+```java
+ConferenceEventListener conferenceEventListener = conference.getEventListener();
+```
+
+Leaving the conference can be done via the [`leave`](https://github.com/infobip/infobip-rtc-android/wiki/Conference#leave) method at the conference.
 On the side of the other participants, the [`UserLeftEvent`](https://github.com/infobip/infobip-rtc-android/wiki/UserLeftEvent) event will be fired upon leave completion.
 
 ```java
